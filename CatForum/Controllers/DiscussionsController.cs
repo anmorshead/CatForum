@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CatForum.Data;
 using CatForum.Models;
+using NuGet.Versioning;
+using Microsoft.AspNetCore.Identity;
 
 namespace CatForum.Controllers
 {
@@ -14,6 +16,7 @@ namespace CatForum.Controllers
     {
         private readonly CatForumContext _context;
 
+        //constructor
         public DiscussionsController(CatForumContext context)
         {
             _context = context;
@@ -23,6 +26,7 @@ namespace CatForum.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Discussion.ToListAsync());
+           
         }
 
         // GET: Discussions/Details/5
@@ -55,12 +59,27 @@ namespace CatForum.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DiscussionId,Title,Content,CreateDate")] Discussion discussion)
+        public async Task<IActionResult> Create([Bind("DiscussionId,Title,Content,CreateDate,ImageFile")] Discussion discussion)
         {
+            //rename the uploaded file to a guid (unique filename) set before saved in db.
+            discussion.ImageFileName = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
+
             if (ModelState.IsValid)
             {
+                //save in db
                 _context.Add(discussion);
                 await _context.SaveChangesAsync();
+
+                //save uploaded file after photo is saved in db.
+                if (discussion.ImageFile != null)
+                {
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos", discussion.ImageFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await discussion.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(discussion);
@@ -74,7 +93,10 @@ namespace CatForum.Controllers
                 return NotFound();
             }
 
-            var discussion = await _context.Discussion.FindAsync(id);
+
+            //Include the comments list
+            var discussion = await _context.Discussion.Include(m => m.Comments).FirstOrDefaultAsync(m => m.DiscussionId == id);
+
             if (discussion == null)
             {
                 return NotFound();

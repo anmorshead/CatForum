@@ -1,7 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<CatForum.Models.Discussion>
+
+@{
+    ViewData["Title"] = "CatForum";
 }
 
-<div class="text-center">
-    <h1>Welcome</h1>
+<h1 class="fw-bold">Welcome to CatForum!</h1>
+<div class="mb-4">
+    Where crazy Cat Ladies come to chat cats!
+</div>
+
+<div class="container">
+    @foreach (var item in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@item.Title</h5>
+                <p class="card-text">@item.Content</p>
+                <a asp-controller="Discussions" asp-action="Details" asp-route-id="@item.DiscussionId" class="btn btn-primary">
+                    View Discussion
+                </a>
+            </div>
+        </div>
+    }
 </div>

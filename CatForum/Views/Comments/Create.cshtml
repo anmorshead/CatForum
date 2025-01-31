@@ -17,7 +17,7 @@
 
             <!-- Content Field -->
             <div class="mb-3">
-                <label asp-for="Content" class="control-label"></label>
+                <p>What did you want to say?</p>
                 <textarea asp-for="Content" class="form-control"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
@@ -31,7 +31,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to Discussions</a>
+    <a asp-controller="Discussions" asp-action="Details" asp-route-id="@ViewData["DiscussionId"]">Back to Discussion</a>
 </div>
 
 @section Scripts {

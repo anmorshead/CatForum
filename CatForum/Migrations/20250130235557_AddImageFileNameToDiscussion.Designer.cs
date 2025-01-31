@@ -3,6 +3,7 @@ using System;
 using CatForum.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CatForum.Migrations
 {
     [DbContext(typeof(CatForumContext))]
-    partial class CatForumContextModelSnapshot : ModelSnapshot
+    [Migration("20250130235557_AddImageFileNameToDiscussion")]
+    partial class AddImageFileNameToDiscussion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -54,6 +57,7 @@ namespace CatForum.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageFileName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")

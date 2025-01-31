@@ -18,16 +18,14 @@ namespace CatForum.Controllers
         {
             _context = context;
         }
-
+        //Deleted the following actions:
         // GET: Comments
-        //public async Task<IActionResult> Index()
-        // {
-        //   var catForumContext = _context.Comment.Include(c => c.Discussion);
-        //   return View(await catForumContext.ToListAsync());
-        // }
+        // GET: Comments/Details/5
+        // POST: Comments/Edit/5
+        // POST: Comments/Delete/5
 
         // GET: Comments/Create
-        [HttpGet]
+       // [HttpGet] needed?
         public IActionResult Create(int? id)
         {
             if (id == null)
@@ -55,7 +53,7 @@ namespace CatForum.Controllers
                 // Redirect to the Details page of the associated discussion
                 return RedirectToAction("Details", "Discussions", new { id = comment.DiscussionId });
             }
-            ViewData["DiscussionId"] = new SelectList(_context.Set<Discussion>(), "DiscussionId", "DiscussionId", comment.DiscussionId);
+            ViewData["DiscussionId"] = comment.DiscussionId;
             return View(comment);
         }
 

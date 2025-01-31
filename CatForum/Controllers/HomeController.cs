@@ -1,36 +1,45 @@
-using System.Diagnostics;
+using CatForum.Data;
 using CatForum.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace CatForum.Controllers
 {
     public class HomeController : Controller
     {
-        //constructor
-        public HomeController()
-        {
+        private readonly CatForumContext _context;
 
+        public HomeController(CatForumContext context)
+        {
+            _context = context;
         }
 
-        public IActionResult Index()
+        // Display all discussions on the homepage
+        public async Task<IActionResult> Index()
         {
-            //entity framework: fetch all discussions
-
-            //perform work here
-            return View();
+            var discussions = await _context.Discussion.ToListAsync();
+            return View(discussions);
         }
 
-        public IActionResult DisplayDiscussion(int id)
+        // Show details of a specific discussion
+        public async Task<IActionResult> DiscussionDetails(int id)
         {
-            return View();
+            var discussion = await _context.Discussion
+                .Include(d => d.Comments) // Load comments if needed
+                .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
+            if (discussion == null)
+            {
+                return NotFound(); 
+            }
+
+            return View(discussion);
         }
 
         public IActionResult Privacy()
         {
             return View();
         }
-
-
     }
-
 }
