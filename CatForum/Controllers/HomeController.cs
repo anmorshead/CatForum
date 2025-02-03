@@ -18,7 +18,7 @@ namespace CatForum.Controllers
         // Display all discussions on the homepage
         public async Task<IActionResult> Index()
         {
-            var discussions = await _context.Discussion.OrderByDescending(m => m.CreateDate).ToListAsync();
+            var discussions = await _context.Discussion.OrderByDescending(m => m.CreateDate).Include(d => d.Comments).ToListAsync();
             return View(discussions);
         }
 
@@ -31,7 +31,22 @@ namespace CatForum.Controllers
 
             if (discussion == null)
             {
-                return NotFound(); 
+                return NotFound();
+            }
+
+            return View(discussion);
+        }
+
+        // GetDiscussion details
+        public async Task<IActionResult> GetDiscussion(int id)
+        {
+            var discussion = await _context.Discussion
+                .Include(d => d.Comments) // Load comments if needed
+                .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
+            if (discussion == null)
+            {
+                return NotFound();
             }
 
             return View(discussion);
