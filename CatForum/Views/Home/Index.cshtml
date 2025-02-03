@@ -1,25 +1,30 @@
-﻿@model List<CatForum.Models.Discussion>
+﻿@model IEnumerable<CatForum.Models.Discussion>
 
 @{
-    ViewData["Title"] = "CatForum";
+    ViewData["Title"] = "Posts";
 }
 
-<h1 class="fw-bold">Welcome to CatForum!</h1>
-<div class="mb-4">
-    Where crazy Cat Ladies come to chat cats!
-</div>
-
+<h2> Latest Threads </h2>
+<br />
 <div class="container">
     @foreach (var item in Model)
     {
         <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">@item.Title</h5>
-                <p class="card-text">@item.Content</p>
-                <a asp-controller="Discussions" asp-action="Details" asp-route-id="@item.DiscussionId" class="btn btn-primary">
-                    View Discussion
-                </a>
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="card-title">@item.Title</h5>
+                    <p class="card-text">@item.CreateDate.ToString("MMM d, yyyy")</p>
+                    <a asp-controller="Discussions" asp-action="Details" asp-route-id="@item.DiscussionId" class="btn btn-primary">
+                        View Discussion
+                    </a>
+                </div>
+
+                @if (!string.IsNullOrEmpty(item.ImageFileName))
+                {
+                    <img src="@Url.Content("/photos/" + item.ImageFileName)" alt="@item.Title" class="thumbnail ms-3" style="max-width: 150px; height: auto;">
+                }
             </div>
         </div>
     }
 </div>
+

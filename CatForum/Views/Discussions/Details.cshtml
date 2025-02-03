@@ -6,11 +6,14 @@
 
 <h1>Post Details</h1>
 
-<hr />
 <div>
-    <div>
-        <img src="@Url.Content("/photos/" + Model.ImageFileName)" alt="@Model.Title" />
-    </div>
+    @if (!string.IsNullOrEmpty(Model.ImageFileName))
+    {
+        <div>
+            <img src="@Url.Content("/photos/" + Model.ImageFileName)" alt="@Model.Title" />
+        </div>
+    }
+
 
     <hr />
     <dl class="row">
@@ -30,7 +33,7 @@
             @Html.DisplayNameFor(model => model.CreateDate)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreateDate)
+            @Model.CreateDate.ToString("MMM d, yyyy")
         </dd>
     </dl>
 </div>
@@ -40,14 +43,17 @@
 
 @if (Model.Comments != null && Model.Comments.Any())
 {
-    <ul>
+    <div class="list-group mb-4">
         @foreach (var comment in Model.Comments)
         {
-            <li>
-                <strong>@comment.CreateDate.ToString("g")</strong> - @comment.Content
-            </li>
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <strong>@comment.CreateDate.ToString("MMM d, yyyy")</strong>
+                </div>
+                <p class="mt-2">@comment.Content</p>
+            </div>
         }
-    </ul>
+    </div>
 }
 else
 {
@@ -55,8 +61,9 @@ else
 }
 
 <!-- Add a Comment Link -->
-<a asp-action="Create" asp-route-discussionId="@Model.DiscussionId">Add a Comment</a>
-
+<a asp-controller="Comments" asp-action="Create" asp-route-id="@Model.DiscussionId" class="btn btn-sm btn-primary">Add Comment</a>
+<br />
+<br />
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.DiscussionId">Edit</a> |
     <a asp-action="Index">Back to all Discussions</a>

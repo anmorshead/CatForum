@@ -18,7 +18,7 @@ namespace CatForum.Controllers
         // Display all discussions on the homepage
         public async Task<IActionResult> Index()
         {
-            var discussions = await _context.Discussion.ToListAsync();
+            var discussions = await _context.Discussion.OrderByDescending(m => m.CreateDate).ToListAsync();
             return View(discussions);
         }
 

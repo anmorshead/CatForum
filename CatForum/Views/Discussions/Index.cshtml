@@ -1,17 +1,20 @@
 ﻿@model IEnumerable<CatForum.Models.Discussion>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Posts";
 }
 
-<h1>Index</h1>
+<h1>Discussions</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create a new Discussion</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFile)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -29,6 +32,12 @@
         {
             <tr>
                 <td>
+                    @if (!string.IsNullOrEmpty(item.ImageFileName))
+                    {
+                        <img src="photos/@item.ImageFileName" alt="@item.Title" class="thumbnail" />
+                    }
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
@@ -41,7 +50,7 @@
                     <a asp-action="Edit" asp-route-id="@item.DiscussionId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.DiscussionId">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.DiscussionId">Delete</a> |
-                    <a asp-controller="Comments" asp-action="Create" asp-route-id="@item.DiscussionId" class="btn btn-sm btn-primary">
+                    <a asp-controller="Comments" asp-action="Create" asp-route-id="@item.DiscussionId" class="btn btn-sm btn-secondary">
                         Add Comment
                     </a>
                 </td>
@@ -49,4 +58,5 @@
         }
     </tbody>
 </table>
+
 
