@@ -26,7 +26,7 @@ namespace CatForum.Controllers
         public async Task<IActionResult> DiscussionDetails(int id)
         {
             var discussion = await _context.Discussion
-                .Include(d => d.Comments) // Load comments if needed
+                .Include(d => d.Comments) 
                 .FirstOrDefaultAsync(m => m.DiscussionId == id);
 
             if (discussion == null)
@@ -41,7 +41,7 @@ namespace CatForum.Controllers
         public async Task<IActionResult> GetDiscussion(int id)
         {
             var discussion = await _context.Discussion
-                .Include(d => d.Comments) // Load comments if needed
+                .Include(d => d.Comments)
                 .FirstOrDefaultAsync(m => m.DiscussionId == id);
 
             if (discussion == null)
@@ -49,8 +49,12 @@ namespace CatForum.Controllers
                 return NotFound();
             }
 
+            // Sort comments in descending order by CreateDate
+            discussion.Comments = discussion.Comments.OrderByDescending(c => c.CreateDate).ToList();
+
             return View(discussion);
         }
+
 
         public IActionResult Privacy()
         {

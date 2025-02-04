@@ -50,8 +50,8 @@ namespace CatForum.Controllers
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 
-                // Redirect to the Details page of the associated discussion
-                return RedirectToAction("Details", "Discussions", new { id = comment.DiscussionId });
+                // Redirect to the GetDiscussion page of the associated discussion
+                return RedirectToAction("GetDiscussion", "Home", new { id = comment.DiscussionId });
             }
             ViewData["DiscussionId"] = comment.DiscussionId;
             return View(comment);

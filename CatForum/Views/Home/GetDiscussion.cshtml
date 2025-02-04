@@ -5,6 +5,7 @@
 }
 
 <h1>@Model.Title</h1>
+<br />
 
 <div>
     @if (!string.IsNullOrEmpty(Model.ImageFileName))
@@ -15,35 +16,24 @@
     }
 
 
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreateDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.CreateDate.ToString("MMM d, yyyy")
-        </dd>
-    </dl>
+
+    <div class="mb-3">
+        <p>@Model.CreateDate.ToString("MMM d, yyyy")</p>
+        @Html.DisplayFor(model => model.Content)
+    </div>
+    
 </div>
 
+
+<!-- Add a Comment Link -->
+<a asp-controller="Comments" asp-action="Create" asp-route-id="@Model.DiscussionId" class="btn btn-sm btn-primary mb-4">Add Comment</a>
+<br />
 <!-- Comments Section -->
 <h3>Comments</h3>
 
 @if (Model.Comments != null && Model.Comments.Any())
 {
-    <div class="list-group mb-4">
+    <div class="list-group mb-3">
         @foreach (var comment in Model.Comments)
         {
             <div class="list-group-item">
@@ -60,11 +50,9 @@ else
     <p>No comments yet.</p>
 }
 
-<!-- Add a Comment Link -->
-<a asp-controller="Comments" asp-action="Create" asp-route-id="@Model.DiscussionId" class="btn btn-sm btn-primary">Add Comment</a>
+
 <br />
 <br />
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.DiscussionId">Edit</a> |
-    <a asp-action="Index">Back to all Discussions</a>
+    <a asp-controller="Home" asp-action="Index">Back to Discussions</a>
 </div>
