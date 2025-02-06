@@ -2,18 +2,48 @@
 
 @{
     ViewData["Title"] = "Posts";
+    var latestDiscussion = Model.FirstOrDefault(); // first discussion
+    var otherDiscussions = Model.Skip(1); // remaining discussions
 }
 
-<h2> Latest Threads </h2>
-<br />
+<h2 class="text-warning-emphasis fw-bold mb-4"> Latest Thread </h2>
+
 <div class="container">
-    @foreach (var item in Model)
+
+    @if (latestDiscussion != null)
     {
-        <div class="card mb-3">
+        <!-- highlighted discussion -->
+        <div class="card shadow-sm mb-4 mx-4">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <a asp-controller="Home" asp-action="GetDiscussion" asp-route-id="@latestDiscussion.DiscussionId" class="text-decoration-none text-warning-emphasis">
+                        @latestDiscussion.Title
+                    </a>
+                </h3>
+
+                @if (!string.IsNullOrEmpty(latestDiscussion.ImageFileName))
+                {
+                    <img src="@Url.Content("/photos/" + latestDiscussion.ImageFileName)" alt="@latestDiscussion.Title" class="img-fluid mt-3">
+                }
+                else
+                {
+                    <img src="@Url.Content("/images/default.png")" alt="CatForum logo" class="img-fluid mt-3">
+                }
+                <p class="card-text">@latestDiscussion.CreateDate.ToString("MMM d, yyyy - h:mm tt")</p>
+                <p class="card-text"><i class="fa-regular fa-comment"></i> @latestDiscussion.Comments.Count</p>
+            </div>
+        </div>
+    }
+
+    <!-- rest of discussions -->
+    <h3 class="mb-4 mx-4 text-warning-emphasis">...More threads like this!</h3>
+    @foreach (var item in otherDiscussions)
+    {
+        <div class="card shadow-sm mb-4 mx-4">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h5 class="card-title">
-                        <a asp-controller="Home" asp-action="GetDiscussion" asp-route-id="@item.DiscussionId" class="text-decoration-none">
+                        <a asp-controller="Home" asp-action="GetDiscussion" asp-route-id="@item.DiscussionId" class="text-decoration-none text-warning-emphasis">
                             @item.Title
                         </a>
                     </h5>
@@ -29,7 +59,6 @@
                 {
                     <img src="@Url.Content("/images/default.png")" alt="CatForum logo" class="thumbnail ms-3">
                 }
-
             </div>
         </div>
     }
