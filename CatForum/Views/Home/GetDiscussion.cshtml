@@ -3,27 +3,26 @@
 @{
     ViewData["Title"] = "Details";
 }
+<div class="container w-75 mx-auto p-2">
+    <div class="card shadow-sm">
 
-<div class="card shadow-sm">
+        <h2 class="m-3 text-warning-emphasis">@Model.Title</h2>
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(Model.ImageFileName))
+            {
+                <div class="text-center mb-3">
+                    <img src="@Url.Content("/photos/" + Model.ImageFileName)" alt="@Model.Title" class="img-fluid" style="max-width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            }
 
-    <h2 class="m-3 text-warning-emphasis">@Model.Title</h2>
-
-    <div class="card-body">
-        @if (!string.IsNullOrEmpty(Model.ImageFileName))
-        {
-            <div class="text-center mb-3">
-                <img src="@Url.Content("/photos/" + Model.ImageFileName)" alt="@Model.Title" class="img-fluid" style="max-width: 100%; height: auto; border-radius: 8px;">
+            <p class="text-muted">@Model.CreateDate.ToString("MMM d, yyyy - h:mm tt")</p>
+            <div class="mb-3">
+                @Html.DisplayFor(model => model.Content)
             </div>
-        }
 
-        <p class="text-muted">@Model.CreateDate.ToString("MMM d, yyyy - h:mm tt")</p>
-        <div class="mb-3">
-            @Html.DisplayFor(model => model.Content)
+            <a asp-controller="Comments" asp-action="Create" asp-route-id="@Model.DiscussionId" class="btn btn-sm btn-primary">Add Comment</a>
         </div>
-
-        <a asp-controller="Comments" asp-action="Create" asp-route-id="@Model.DiscussionId" class="btn btn-sm btn-primary">Add Comment</a>
     </div>
-</div>
 
 <!-- Comments Section -->
 <h3 class="mt-4 mb-3">Comments</h3>
@@ -47,7 +46,10 @@ else
     <p>No comments yet.</p>
 }
 
-<div class="mt-4">
-    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Back to Discussions</a>
+
+    <div class="mt-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Back to Discussions</a>
+    </div>
+
 </div>
 

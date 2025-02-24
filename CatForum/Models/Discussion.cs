@@ -11,7 +11,7 @@ namespace CatForum.Models
         public string Content { get; set; } = string.Empty;
         public string? ImageFileName { get; set; } // Nullable, so it's optional
 
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         //property for dile upload, not mapped in EF
         [NotMapped]

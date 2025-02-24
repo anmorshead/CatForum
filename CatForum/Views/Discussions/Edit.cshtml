@@ -24,9 +24,10 @@
             </div>
             <div class="mb-3">
                 <label asp-for="CreateDate" class="control-label"></label>
-                <input asp-for="CreateDate" class="form-control" />
+                <input asp-for="CreateDate" class="form-control" readonly />
                 <span asp-validation-for="CreateDate" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

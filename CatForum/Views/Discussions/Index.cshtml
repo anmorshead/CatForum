@@ -32,14 +32,16 @@
         {
             <tr>
                 <td>
-                    @if (!string.IsNullOrEmpty(item.ImageFileName))
+                    @if (!string.IsNullOrWhiteSpace(item.ImageFileName))
                     {
                         <img src="photos/@item.ImageFileName" alt="@item.Title" class="thumbnail" />
                     }
                     else
                     {
-                        <img src="images/default.png" alt="CatForum logo" class="thumbnail" />
+                        <img src="~/images/default.png" alt="CatForum logo" class="thumbnail" />
+
                     }
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
