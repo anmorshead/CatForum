@@ -7,7 +7,7 @@ builder.Services.AddDbContext<CatForumContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("CatForumContext") ?? throw new InvalidOperationException("Connection string 'CatForumContext' not found.")));
 
 //changed from true to false for identity setup
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<CatForumContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<CatForumContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

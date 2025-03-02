@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CatForum.Data
 {
-    public class CatForumContext : IdentityDbContext
+    public class CatForumContext : IdentityDbContext<ApplicationUser>
     {
         public CatForumContext (DbContextOptions<CatForumContext> options)
             : base(options)
