@@ -7,16 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CatForum.Data;
 using CatForum.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace CatForum.Controllers
 {
+    //only logged in users have access
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly CatForumContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CommentsController(CatForumContext context)
+        public CommentsController(CatForumContext context,UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         //Deleted the following actions:
         // GET: Comments
@@ -25,13 +32,26 @@ namespace CatForum.Controllers
         // POST: Comments/Delete/5
 
         // GET: Comments/Create
-       // [HttpGet] needed?
-        public IActionResult Create(int? id)
+        // [HttpGet] needed?
+        public async Task<IActionResult> Create(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
+            // get the logged in user ID
+            var userId = _userManager.GetUserId(User);
+
+            var comment = await _context.Discussion
+                .Where(m => m.ApplicationUserId == userId) // filter by user Id
+                .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
             ViewData["DiscussionId"] = id;
 
             return View();
@@ -44,6 +64,8 @@ namespace CatForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CommentId,Content,CreateDate,DiscussionId")] Comment comment)
         {
+            //TODO: embed the user id in the form and validate
+
             if (ModelState.IsValid)
             {
                 comment.CreateDate = DateTime.Now;

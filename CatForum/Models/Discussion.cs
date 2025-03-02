@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CatForum.Data;
 
 namespace CatForum.Models
 {
@@ -20,6 +21,12 @@ namespace CatForum.Models
 
         //Navigation Property - a discussion can have many comments
         public List<Comment>? Comments { get; set; } //nullable
+
+        // Foreign key (AspNetUsers table)
+        public string ApplicationUserId { get; set; } = string.Empty;
+
+        // Navigation property
+        public ApplicationUser? ApplicationUser { get; set; } // nullable!!!
 
     }
 

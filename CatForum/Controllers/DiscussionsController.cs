@@ -9,23 +9,35 @@ using CatForum.Data;
 using CatForum.Models;
 using NuGet.Versioning;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CatForum.Controllers
 {
+    //only logged in users have access
+    [Authorize]
     public class DiscussionsController : Controller
     {
         private readonly CatForumContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         //constructor
-        public DiscussionsController(CatForumContext context)
+        public DiscussionsController(CatForumContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: Discussions
+        // GET: Discussions - My Discussions: get all discusions by user id
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Discussion.ToListAsync());
+
+            var userId = _userManager.GetUserId(User);
+
+            var discussions = await _context.Discussion
+                .Where(m => m.ApplicationUserId == userId) //filter by userId
+                .ToListAsync();
+              
+            return View(discussions);
            
         }
 
@@ -64,6 +76,9 @@ namespace CatForum.Controllers
             //rename the uploaded file to a guid (unique filename) set before saved in db.
             discussion.ImageFileName = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
 
+            //set the userId of the eprson logged in
+            discussion.ApplicationUserId = _userManager.GetUserId(User);
+
             if (ModelState.IsValid)
             {
                 //save in db
@@ -93,9 +108,15 @@ namespace CatForum.Controllers
                 return NotFound();
             }
 
+            // get the logged in user ID
+            var userId = _userManager.GetUserId(User);
 
-            //Include the comments list
-            var discussion = await _context.Discussion.Include(m => m.Comments).FirstOrDefaultAsync(m => m.DiscussionId == id);
+
+            
+            var discussion = await _context.Discussion
+                .Include(m => m.Comments) //Include the comments list
+                .Where(m => m.ApplicationUserId == userId) //filter by userId
+                .FirstOrDefaultAsync(m => m.DiscussionId == id);
 
             if (discussion == null)
             {
@@ -109,7 +130,7 @@ namespace CatForum.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Content,CreateDate")] Discussion discussion)
+        public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Content,CreateDate,ApplicationUserId")] Discussion discussion)
         {
             if (id != discussion.DiscussionId)
             {
@@ -147,8 +168,13 @@ namespace CatForum.Controllers
                 return NotFound();
             }
 
+            // get the logged in user ID
+            var userId = _userManager.GetUserId(User);
+
             var discussion = await _context.Discussion
+                .Where(m => m.ApplicationUserId == userId) //filter by user id
                 .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
             if (discussion == null)
             {
                 return NotFound();
@@ -162,8 +188,19 @@ namespace CatForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var discussion = await _context.Discussion.FindAsync(id);
-            if (discussion != null)
+
+            // get the logged in user ID
+            var userId = _userManager.GetUserId(User);
+
+            var discussion = await _context.Discussion
+                .Where(m => m.ApplicationUserId == userId) // filter by user Id
+                .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
+            if (discussion == null)
+            {
+                return NotFound();
+            }
+            else
             {
                 _context.Discussion.Remove(discussion);
             }
