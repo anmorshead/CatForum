@@ -12,6 +12,11 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="DiscussionId" />
+
+            <div class="mb-3 w-50"> 
+                <img src="/photos/@Model.ImageFileName" alt="@Model.Title" class="img-fluid" />
+            </div>
+
             <div class="mb-3">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />

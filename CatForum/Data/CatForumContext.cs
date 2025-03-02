@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CatForum.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CatForum.Data
 {
-    public class CatForumContext : DbContext
+    public class CatForumContext : IdentityDbContext
     {
         public CatForumContext (DbContextOptions<CatForumContext> options)
             : base(options)
