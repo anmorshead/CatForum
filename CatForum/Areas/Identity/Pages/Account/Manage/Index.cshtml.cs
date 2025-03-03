@@ -68,12 +68,10 @@ namespace CatForum.Areas.Identity.Pages.Account.Manage
 
             public string Location { get; set; }
 
-            //public string ImageFileName { get; set; } = string.Empty;
+            public string ImageFileName { get; set; }
 
-            //property for file upload, not mapped (for later)
-            //[NotMapped]
-            //[Display(Name = "Profile Picture")]
-            //public IFormFile? ImageFile { get; set; } //nullable
+            [Display (Name = "Profile Picture")]
+            public IFormFile ImageFile { get; set; } 
 
             /////////////////////////////////////////
             /// END: ApplicationUser custom fields
@@ -101,7 +99,7 @@ namespace CatForum.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 Name = user.Name,
                 Location = user.Location,
-                //ImageFileName = user.ImageFileName
+                ImageFileName = user.ImageFileName,
 
                 /////////////////////////////////////////
                 /// END: ApplicationUser custom fields
@@ -160,10 +158,20 @@ namespace CatForum.Areas.Identity.Pages.Account.Manage
                 user.Location = Input.Location;
             }
 
-            //if (Input.ImageFileName != user.ImageFileName)
-            //{
-            //    user.ImageFileName = Input.ImageFileName;
-            //}
+            //save the uploaded profile picture in db and folder
+            if (Input.ImageFile != null)
+            {
+                string imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.ImageFile?.FileName);
+
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "profile_img", imageFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.ImageFile.CopyToAsync(fileStream);
+                }
+
+                user.ImageFileName = imageFileName; // change the filename 
+            }
 
             await _userManager.UpdateAsync(user);
 

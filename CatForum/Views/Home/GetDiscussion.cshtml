@@ -3,6 +3,24 @@
 @{
     ViewData["Title"] = "Details";
 }
+
+@if (Model.ApplicationUser != null)
+{
+    <div class="d-flex">
+        @if (!string.IsNullOrEmpty(Model.ApplicationUser.ImageFileName))
+        {
+            <div class="pe-2">
+                <img src="~/profile_img/@Model.ApplicationUser.ImageFileName" alt="@Model.ApplicationUser.Name" class="profile-thumbnail" />
+            </div>
+        }
+        <div>
+            @Model.ApplicationUser.Name
+        </div>
+    </div>
+}
+
+
+
 <div class="container w-75 mx-auto p-2">
     <div class="card shadow-sm">
 

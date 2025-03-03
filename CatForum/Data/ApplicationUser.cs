@@ -16,9 +16,9 @@ namespace CatForum.Data
         public string ImageFileName { get; set; } = string.Empty;
 
         //property for file upload, not mapped
-        //[NotMapped]
-        //[Display(Name = "Profile Picture")]
-        //public IFormFile? ImageFile { get; set; } //nullable
+        [NotMapped]
+        [Display(Name = "Profile Picture")]
+        public IFormFile? ImageFile { get; set; } //nullable
 
 
     }

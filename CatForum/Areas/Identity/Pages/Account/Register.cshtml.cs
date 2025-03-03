@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using CatForum.Models;
 
 namespace CatForum.Areas.Identity.Pages.Account
 {
@@ -81,12 +82,8 @@ namespace CatForum.Areas.Identity.Pages.Account
 
             public string Location { get; set; }
 
-            //public string ImageFileName { get; set; } = string.Empty;
-
-            //property for file upload, not mapped (for later)
-            //[NotMapped]
-            //[Display(Name = "Profile Picture")]
-            //public IFormFile? ImageFile { get; set; } //nullable
+            [Display(Name = "Profile Picture")]
+            public IFormFile ImageFile { get; set; } //nullable
 
             /////////////////////////////////////////
             /// END: ApplicationUser custom fields
@@ -142,7 +139,21 @@ namespace CatForum.Areas.Identity.Pages.Account
 
                 user.Name = Input.Name;
                 user.Location = Input.Location;
-               // user.ImageFileNAme = Input.ImageFileNAme;
+
+                // save the uploaded profile picture in db and folder
+                if (Input.ImageFile != null)
+                {
+                    string imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.ImageFile?.FileName);
+
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "profile_img", imageFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Input.ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    user.ImageFileName = imageFileName;
+                }
 
                 /////////////////////////////////////////
                 /// END: ApplicationUser custom fields

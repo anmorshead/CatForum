@@ -62,9 +62,10 @@ namespace CatForum.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentId,Content,CreateDate,DiscussionId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("CommentId,Content,CreateDate,DiscussionId,ApplicationUserId")] Comment comment)
         {
-            //TODO: embed the user id in the form and validate
+            //set the userId of the person logged in
+            comment.ApplicationUserId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)
             {

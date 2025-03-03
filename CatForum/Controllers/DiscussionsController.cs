@@ -76,7 +76,7 @@ namespace CatForum.Controllers
             //rename the uploaded file to a guid (unique filename) set before saved in db.
             discussion.ImageFileName = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
 
-            //set the userId of the eprson logged in
+            //set the userId of the person logged in
             discussion.ApplicationUserId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)

@@ -43,6 +43,7 @@ namespace CatForum.Controllers
         {
             var discussion = await _context.Discussion
                 .Include(d => d.Comments)
+                .Include(m => m.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.DiscussionId == id);
 
             if (discussion == null)

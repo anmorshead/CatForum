@@ -1,4 +1,6 @@
-﻿namespace CatForum.Models
+﻿using CatForum.Data;
+
+namespace CatForum.Models
 {
     public class Comment
     {
@@ -11,6 +13,12 @@
 
         //Navigation property - a comment belongs to a discussion
         public Discussion? Discussion { get; set; } //should always be nullable (?)
+
+        // Foreign key (AspNetUsers table)
+        public string ApplicationUserId { get; set; } = string.Empty;
+
+        // Navigation property
+        public ApplicationUser? ApplicationUser { get; set; } // nullable!!!
     }
 
 }

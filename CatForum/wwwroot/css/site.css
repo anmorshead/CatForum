@@ -36,8 +36,8 @@ body {
     height: auto;
 }
 
-.profile-pic {
-    width: 150px;
+.profile-thumbnail {
+    width: 55px;
     height: auto;
     border-radius: 50%;
 }
