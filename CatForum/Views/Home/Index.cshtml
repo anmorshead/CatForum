@@ -29,7 +29,12 @@
                 {
                     <img src="@Url.Content("/images/default.png")" alt="CatForum logo" class="img-fluid mt-3">
                 }
-                <p class="card-text">@latestDiscussion.CreateDate.ToString("MMM d, yyyy - h:mm tt")</p>
+                <div>
+                    <p class="card-text">
+                        @latestDiscussion.ApplicationUser?.Name - @latestDiscussion.CreateDate.ToString("MMM d, yyyy - h:mm tt")
+                    </p>
+                </div>
+
                 <p class="card-text"><i class="fa-regular fa-comment"></i> @latestDiscussion.Comments.Count</p>
             </div>
         </div>
@@ -47,7 +52,9 @@
                             @item.Title
                         </a>
                     </h5>
-                    <p class="card-text">@item.CreateDate.ToString("MMM d, yyyy - h:mm tt")</p>
+                    <p class="card-text">
+                        @item.ApplicationUser?.Name - @item.CreateDate.ToString("MMM d, yyyy - h:mm tt")
+                    </p>
                     <p class="card-text"><i class="fa-regular fa-comment"></i> @item.Comments.Count</p>
                 </div>
 

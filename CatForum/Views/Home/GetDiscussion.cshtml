@@ -4,28 +4,28 @@
     ViewData["Title"] = "Details";
 }
 
-@if (Model.ApplicationUser != null)
-{
-    <div class="d-flex">
-        @if (!string.IsNullOrEmpty(Model.ApplicationUser.ImageFileName))
-        {
-            <div class="pe-2">
-                <img src="~/profile_img/@Model.ApplicationUser.ImageFileName" alt="@Model.ApplicationUser.Name" class="profile-thumbnail" />
-            </div>
-        }
-        <div>
-            @Model.ApplicationUser.Name
-        </div>
-    </div>
-}
-
-
 
 <div class="container w-75 mx-auto p-2">
     <div class="card shadow-sm">
 
         <h2 class="m-3 text-warning-emphasis">@Model.Title</h2>
         <div class="card-body">
+            <div class="mb-3">
+            @if (Model.ApplicationUser != null)
+            {
+                <div class="d-flex">
+                    @if (!string.IsNullOrEmpty(Model.ApplicationUser.ImageFileName))
+                    {
+                        <div class="pe-2">
+                            <img src="~/profile_img/@Model.ApplicationUser.ImageFileName" alt="@Model.ApplicationUser.Name" class="profile-thumbnail" />
+                        </div>
+                    }
+                    <div>
+                        @Model.ApplicationUser.Name
+                    </div>
+                </div>
+            }
+            </div>
             @if (!string.IsNullOrEmpty(Model.ImageFileName))
             {
                 <div class="text-center mb-3">
@@ -52,6 +52,7 @@
         {
             <div class="list-group-item">
                 <div class="d-flex justify-content-between">
+                    <strong>@comment.ApplicationUser.Name</strong>
                     <strong>@comment.CreateDate.ToString("MMM d, yyyy - h:mm tt")</strong>
                 </div>
                 <p class="mt-2">@comment.Content</p>

@@ -44,7 +44,6 @@ namespace CatForum.Controllers
             var userId = _userManager.GetUserId(User);
 
             var comment = await _context.Discussion
-                .Where(m => m.ApplicationUserId == userId) // filter by user Id
                 .FirstOrDefaultAsync(m => m.DiscussionId == id);
 
             if (comment == null)
