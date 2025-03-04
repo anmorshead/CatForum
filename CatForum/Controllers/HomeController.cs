@@ -61,6 +61,27 @@ namespace CatForum.Controllers
             return View(discussion);
         }
 
+        public async Task<IActionResult> Profile(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .Include(u => u.Discussions) // Include user's discussions
+                .ThenInclude(m => m.Comments)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+
 
         public IActionResult Privacy()
         {

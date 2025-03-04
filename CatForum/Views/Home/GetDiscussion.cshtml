@@ -21,7 +21,9 @@
                         </div>
                     }
                     <div>
-                        @Model.ApplicationUser.Name
+                        <a asp-controller="Home" asp-action="Profile" asp-route-id="@Model.ApplicationUser?.Id" class="text-decoration-none text-warning-emphasis">
+                            @Model.ApplicationUser?.Name
+                        </a>
                     </div>
                 </div>
             }

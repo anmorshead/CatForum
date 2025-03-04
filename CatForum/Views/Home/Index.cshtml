@@ -31,7 +31,9 @@
                 }
                 <div>
                     <p class="card-text">
-                        @latestDiscussion.ApplicationUser?.Name - @latestDiscussion.CreateDate.ToString("MMM d, yyyy - h:mm tt")
+                        <a asp-controller="Home" asp-action="Profile" asp-route-id="@latestDiscussion.ApplicationUser?.Id" class="text-decoration-none text-warning-emphasis">
+                            @latestDiscussion.ApplicationUser?.Name
+                        </a> - @latestDiscussion.CreateDate.ToString("MMM d, yyyy - h:mm tt")
                     </p>
                 </div>
 
@@ -53,8 +55,11 @@
                         </a>
                     </h5>
                     <p class="card-text">
-                        @item.ApplicationUser?.Name - @item.CreateDate.ToString("MMM d, yyyy - h:mm tt")
+                        <a asp-controller="Home" asp-action="Profile" asp-route-id="@item.ApplicationUser?.Id" class="text-decoration-none text-warning-emphasis">
+                            @item.ApplicationUser?.Name
+                        </a> - @item.CreateDate.ToString("MMM d, yyyy - h:mm tt")
                     </p>
+
                     <p class="card-text"><i class="fa-regular fa-comment"></i> @item.Comments.Count</p>
                 </div>
 
