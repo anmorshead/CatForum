@@ -13,13 +13,14 @@
     @if (latestDiscussion != null)
     {
         <!-- highlighted discussion -->
-        <div class="card shadow-sm mb-4 mx-4">
+        <div class="card card d-inline-block w-auto shadow-sm mb-4 mx-4">
             <div class="card-body">
                 <h3 class="card-title">
                     <a asp-controller="Home" asp-action="GetDiscussion" asp-route-id="@latestDiscussion.DiscussionId" class="text-decoration-none text-warning-emphasis">
                         @latestDiscussion.Title
                     </a>
                 </h3>
+                <div class="img-fluid">
 
                 @if (!string.IsNullOrEmpty(latestDiscussion.ImageFileName))
                 {
@@ -29,6 +30,8 @@
                 {
                     <img src="@Url.Content("/images/default.png")" alt="CatForum logo" class="img-fluid mt-3">
                 }
+                </div>
+
                 <div>
                     <p class="card-text">
                         <a asp-controller="Home" asp-action="Profile" asp-route-id="@latestDiscussion.ApplicationUser?.Id" class="text-decoration-none text-warning-emphasis">

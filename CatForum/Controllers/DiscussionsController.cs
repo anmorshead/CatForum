@@ -73,19 +73,22 @@ namespace CatForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DiscussionId,Title,Content,CreateDate,ImageFile")] Discussion discussion)
         {
-            //rename the uploaded file to a guid (unique filename) set before saved in db.
-            discussion.ImageFileName = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
-
-            //set the userId of the person logged in
+            // Set the userId of the person logged in
             discussion.ApplicationUserId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)
             {
-                //save in db
+                // Only generate a file name if an image is uploaded
+                if (discussion.ImageFile != null)
+                {
+                    discussion.ImageFileName = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile.FileName);
+                }
+
+                // Save in db
                 _context.Add(discussion);
                 await _context.SaveChangesAsync();
 
-                //save uploaded file after photo is saved in db.
+                // Save uploaded file after discussion is saved in db.
                 if (discussion.ImageFile != null)
                 {
                     string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos", discussion.ImageFileName);
@@ -99,6 +102,7 @@ namespace CatForum.Controllers
             }
             return View(discussion);
         }
+
 
         // GET: Discussions/Edit/5
         public async Task<IActionResult> Edit(int? id)

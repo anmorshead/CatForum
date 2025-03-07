@@ -19,7 +19,7 @@
 
         <hr />
 
-        <h4 class="text-warning-emphasis">Recent Discussions</h4>
+        <h4 class="text-warning-emphasis mb-">Recent Discussions</h4>
         @if (Model.Discussions.Any())
         {
             @foreach (var item in Model.Discussions.OrderByDescending(d => d.CreateDate))
